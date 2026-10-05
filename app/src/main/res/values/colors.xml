@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="blue_primary">#1557B0</color>
+    <color name="blue_dark">#0D3B78</color>
+    <color name="teal_secondary">#00796B</color>
+    <color name="surface_soft">#F5F7FB</color>
+    <color name="text_primary">#1B1B1F</color>
+    <color name="text_secondary">#5F6368</color>
+    <color name="warning">#B3261E</color>
+</resources>

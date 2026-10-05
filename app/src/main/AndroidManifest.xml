@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- La vibración sí requiere permiso de manifiesto. -->
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- El flash es opcional: la app también debe abrir en dispositivos sin linterna. -->
+    <uses-feature
+        android:name="android.hardware.camera.flash"
+        android:required="false" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_phonelab"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/ic_phonelab"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.PhoneLab">
+
+        <activity
+            android:name=".CustomSensorActivity"
+            android:exported="false" />
+        <activity
+            android:name=".VibrationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".FlashlightActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AccelerometerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
