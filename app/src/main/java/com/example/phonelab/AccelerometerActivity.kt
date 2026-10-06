@@ -20,8 +20,14 @@ class AccelerometerActivity : AppCompatActivity(), SensorEventListener {
     private lateinit var tvY: TextView
     private lateinit var tvZ: TextView
     private lateinit var tvMagnitude: TextView
+    private lateinit var tvMaxMagnitude: TextView
     private lateinit var tvMovement: TextView
+    private lateinit var tvStrongMovementCount: TextView
     private lateinit var tvOrientation: TextView
+
+    private var maxMagnitude = 0f
+    private var strongMovementCount = 0
+    private var wasStrongMovement = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +38,9 @@ class AccelerometerActivity : AppCompatActivity(), SensorEventListener {
         tvY = findViewById(R.id.tvY)
         tvZ = findViewById(R.id.tvZ)
         tvMagnitude = findViewById(R.id.tvMagnitude)
+        tvMaxMagnitude = findViewById(R.id.tvMaxMagnitude)
         tvMovement = findViewById(R.id.tvMovement)
+        tvStrongMovementCount = findViewById(R.id.tvStrongMovementCount)
         tvOrientation = findViewById(R.id.tvOrientation)
 
         sensorManager = getSystemService(SensorManager::class.java)
@@ -47,6 +55,7 @@ class AccelerometerActivity : AppCompatActivity(), SensorEventListener {
 
     override fun onResume() {
         super.onResume()
+
         accelerometer?.let { sensor ->
             sensorManager.registerListener(
                 this,
@@ -62,44 +71,105 @@ class AccelerometerActivity : AppCompatActivity(), SensorEventListener {
     }
 
     override fun onSensorChanged(event: SensorEvent?) {
-        if (event?.sensor?.type != Sensor.TYPE_ACCELEROMETER) return
+
+        if (event?.sensor?.type != Sensor.TYPE_ACCELEROMETER) {
+            return
+        }
 
         val x = event.values[0]
         val y = event.values[1]
         val z = event.values[2]
 
-        val magnitude = sqrt(x * x + y * y + z * z)
-        val differenceFromGravity = abs(magnitude - SensorManager.GRAVITY_EARTH)
+        val magnitude = sqrt(
+            x * x +
+                    y * y +
+                    z * z
+        )
+
+        val differenceFromGravity =
+            abs(magnitude - SensorManager.GRAVITY_EARTH)
 
         val movementState = when {
-            differenceFromGravity < 1.5f -> "Estable"
-            differenceFromGravity < 4.0f -> "Movimiento moderado"
-            else -> "Movimiento fuerte"
+            differenceFromGravity < 1.5f -> {
+                "Estable"
+            }
+
+            differenceFromGravity < 4.0f -> {
+                "Movimiento moderado"
+            }
+
+            else -> {
+                "Movimiento fuerte"
+            }
         }
 
         val orientationState = when {
-            abs(z) > 7f -> if (z > 0) "Pantalla hacia arriba" else "Pantalla hacia abajo"
-            abs(y) > 7f -> if (y > 0) "Vertical" else "Vertical invertido"
-            abs(x) > 7f -> "Horizontal / paisaje"
-            else -> "Inclinado"
+            abs(z) > 7f -> {
+                if (z > 0) {
+                    "Pantalla hacia arriba"
+                } else {
+                    "Pantalla hacia abajo"
+                }
+            }
+
+            abs(y) > 7f -> {
+                if (y > 0) {
+                    "Vertical"
+                } else {
+                    "Vertical invertido"
+                }
+            }
+
+            abs(x) > 7f -> {
+                "Horizontal / paisaje"
+            }
+
+            else -> {
+                "Inclinado"
+            }
         }
+
+        // RETO A1:
+        // Guardar la magnitud máxima registrada.
+        if (magnitude > maxMagnitude) {
+            maxMagnitude = magnitude
+        }
+
+        // RETO A2:
+        // Detectar únicamente el inicio de un movimiento fuerte.
+        val isStrongMovement =
+            movementState == "Movimiento fuerte"
+
+        if (isStrongMovement && !wasStrongMovement) {
+            strongMovementCount++
+        }
+
+        wasStrongMovement = isStrongMovement
 
         tvX.text = "X = %.2f m/s²".format(x)
         tvY.text = "Y = %.2f m/s²".format(y)
         tvZ.text = "Z = %.2f m/s²".format(z)
-        tvMagnitude.text = "Magnitud: %.2f m/s²".format(magnitude)
-        tvMovement.text = "Movimiento: $movementState"
-        tvOrientation.text = "Orientación: $orientationState"
 
-        // TODO RETO A1:
-        // Guarda y muestra la magnitud máxima registrada desde que se abrió esta pantalla.
+        tvMagnitude.text =
+            "Magnitud: %.2f m/s²".format(magnitude)
 
-        // TODO RETO A2:
-        // Cuenta cuántas veces se detecta un "Movimiento fuerte" sin incrementar
-        // el contador cientos de veces durante el mismo movimiento.
+        tvMaxMagnitude.text =
+            "Magnitud máxima: %.2f m/s²".format(maxMagnitude)
+
+        tvMovement.text =
+            "Movimiento: $movementState"
+
+        tvStrongMovementCount.text =
+            "Movimientos fuertes detectados: $strongMovementCount"
+
+        tvOrientation.text =
+            "Orientación: $orientationState"
     }
 
-    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+    override fun onAccuracyChanged(
+        sensor: Sensor?,
+        accuracy: Int
+    ) {
         // No se requiere una acción para esta práctica.
     }
 }
