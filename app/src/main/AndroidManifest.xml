@@ -1,12 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- La vibración sí requiere permiso de manifiesto. -->
-    <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- Permiso necesario para la vibración. -->
+    <uses-permission
+        android:name="android.permission.VIBRATE" />
 
-    <!-- El flash es opcional: la app también debe abrir en dispositivos sin linterna. -->
+    <!--
+        Android 10 o superior requiere este permiso
+        para acceder a sensores relacionados con actividad física,
+        como el detector de pasos.
+    -->
+    <uses-permission
+        android:name="android.permission.ACTIVITY_RECOGNITION" />
+
+    <!-- El flash es opcional. -->
     <uses-feature
         android:name="android.hardware.camera.flash"
+        android:required="false" />
+
+    <!-- El detector de pasos también se declara como opcional. -->
+    <uses-feature
+        android:name="android.hardware.sensor.stepdetector"
         android:required="false" />
 
     <application
@@ -20,23 +35,35 @@
         <activity
             android:name=".CustomSensorActivity"
             android:exported="false" />
+
         <activity
             android:name=".VibrationActivity"
             android:exported="false" />
+
         <activity
             android:name=".FlashlightActivity"
             android:exported="false" />
+
         <activity
             android:name=".AccelerometerActivity"
             android:exported="false" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
+
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+
+                <action
+                    android:name="android.intent.action.MAIN" />
+
+                <category
+                    android:name="android.intent.category.LAUNCHER" />
+
             </intent-filter>
+
         </activity>
+
     </application>
 
 </manifest>
