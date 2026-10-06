@@ -5,7 +5,6 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.widget.Spinner
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 
@@ -37,6 +36,7 @@ class VibrationActivity : AppCompatActivity() {
 
     private fun playSelectedPattern() {
         when (spinnerPatterns.selectedItemPosition) {
+
             0 -> {
                 vibrator.vibrate(
                     VibrationEffect.createOneShot(
@@ -44,7 +44,9 @@ class VibrationActivity : AppCompatActivity() {
                         VibrationEffect.DEFAULT_AMPLITUDE
                     )
                 )
-                tvVibrationInfo.text = "Patrón ejecutado: vibración corta"
+
+                tvVibrationInfo.text =
+                    "Patrón ejecutado: vibración corta"
             }
 
             1 -> {
@@ -54,30 +56,55 @@ class VibrationActivity : AppCompatActivity() {
                         VibrationEffect.DEFAULT_AMPLITUDE
                     )
                 )
-                tvVibrationInfo.text = "Patrón ejecutado: vibración larga"
+
+                tvVibrationInfo.text =
+                    "Patrón ejecutado: vibración larga"
             }
 
             2 -> {
-                val pattern = longArrayOf(0, 180, 120, 180)
-                vibrator.vibrate(
-                    VibrationEffect.createWaveform(pattern, -1)
+                val pattern = longArrayOf(
+                    0,
+                    180,
+                    120,
+                    180
                 )
-                tvVibrationInfo.text = "Patrón ejecutado: doble vibración"
+
+                vibrator.vibrate(
+                    VibrationEffect.createWaveform(
+                        pattern,
+                        -1
+                    )
+                )
+
+                tvVibrationInfo.text =
+                    "Patrón ejecutado: doble vibración"
             }
 
             3 -> {
-                // TODO RETO V1:
-                // Sustituye este mensaje por un patrón diseñado por ti.
-                // Puedes agregar más tiempos al arreglo o investigar amplitudes.
-                Toast.makeText(
-                    this,
-                    "Reto pendiente: diseña tu patrón personalizado",
-                    Toast.LENGTH_SHORT
-                ).show()
+                // RETO V1:
+                // Patrón personalizado de tres pulsos cortos.
+                val customPattern = longArrayOf(
+                    0,
+                    120,
+                    100,
+                    120,
+                    100,
+                    120
+                )
+
+                vibrator.vibrate(
+                    VibrationEffect.createWaveform(
+                        customPattern,
+                        -1
+                    )
+                )
+
+                tvVibrationInfo.text =
+                    "Patrón ejecutado: triple pulso personalizado"
             }
         }
     }
 
-    // TODO RETO V2 (opcional):
+    // RETO V2 (opcional):
     // Permite que el usuario configure algún parámetro del patrón desde la interfaz.
 }
