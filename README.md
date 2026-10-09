@@ -1,36 +1,154 @@
-# PhoneLab Base
+# PhoneLab Android
 
-Plantilla de proyecto
+Aplicación Android desarrollada en Kotlin para trabajar con sensores y periféricos del teléfono.
 
-El proyecto está desarrollado con Kotlin + XML y contiene cuatro módulos:
+El proyecto parte de una plantilla base y se completaron los retos solicitados para:
 
-1. **Acelerómetro**: lectura de X, Y, Z, magnitud, movimiento y orientación.
-2. **Linterna**: encendido y apagado mediante `CameraManager`.
-3. **Vibración**: patrones cortos, largos y dobles mediante `VibrationEffect`.
-4. **Mi sensor/periférico**: estructura deliberadamente incompleta para la implementación del estudiante.
+- Acelerómetro
+- Linterna
+- Vibración
+- Sensor/periférico adicional
 
-## Entorno del proyecto
+Además, se agregó un módulo de podómetro para detectar pasos y mostrar una interpretación sencilla de la actividad registrada.
 
-- Android Gradle Plugin: 8.5.0
-- Kotlin: 1.9.0
-- compileSdk: 34
-- targetSdk: 34
-- minSdk: 26
-- Java/JDK: 17
+---
 
-## Cómo comenzar
+## Funcionalidades
 
-1. Clona o descarga este repositorio.
-2. Abre la carpeta raíz `PhoneLabBase` en Android Studio.
-3. Espera la sincronización de Gradle.
-4. Ejecuta la aplicación preferentemente en un **teléfono físico**.
-5. Busca la palabra `TODO` en todo el proyecto para localizar los retos.
+### Acelerómetro
 
-## Retos obligatorios
+El módulo permite:
 
-- **Acelerómetro:** registrar magnitud máxima y contar eventos de movimiento fuerte.
-- **Linterna:** implementar modo intermitente sin bloquear el hilo principal.
-- **Vibración:** crear un patrón personalizado.
-- **Mi sensor/periférico:** implementar un cuarto periférico o sensor e interpretar sus datos.
+- Ver los valores X, Y y Z.
+- Mostrar la magnitud actual.
+- Registrar la magnitud máxima alcanzada.
+- Detectar movimientos fuertes.
+- Contar movimientos fuertes sin repetir varias veces el mismo evento.
+- Mostrar la orientación aproximada del teléfono.
 
-Consulta el documento de la actividad para los requisitos completos.
+### Evidencia
+
+<p align="center">
+  <img src="docs/evidence/accelerometer.jpg" width="320" alt="Acelerómetro">
+</p>
+
+---
+
+## Linterna
+
+El módulo permite:
+
+- Encender y apagar la linterna.
+- Activar un modo intermitente.
+- Detener el modo intermitente.
+- Apagar la linterna automáticamente al salir de la pantalla.
+
+### Evidencia
+
+<p align="center">
+  <img src="docs/evidence/flashlight.jpg" width="320" alt="Linterna">
+</p>
+
+---
+
+## Vibración
+
+El módulo incluye diferentes patrones de vibración:
+
+- Vibración corta.
+- Vibración larga.
+- Vibración doble.
+- Patrón personalizado.
+
+Para el reto se agregó un patrón de **triple pulso personalizado**.
+
+### Evidencia
+
+<p align="center">
+  <img src="docs/evidence/vibration.jpg" width="320" alt="Vibración">
+</p>
+
+---
+
+## Podómetro
+
+Como sensor adicional se implementó un podómetro.
+
+El módulo permite:
+
+- Detectar pasos realizados por el usuario.
+- Mostrar los pasos de la sesión actual.
+- Reiniciar el contador.
+- Mostrar el avance hacia una meta de demostración.
+- Interpretar la actividad registrada.
+
+Los estados utilizados son:
+
+- Sin actividad registrada.
+- Primeros pasos de la sesión.
+- Caminata corta detectada.
+- Actividad continua.
+- Meta de demostración alcanzada.
+
+La meta de 20 pasos se utiliza únicamente para demostrar el funcionamiento del sensor.
+
+### Sesión reiniciada
+
+<p align="center">
+  <img src="docs/evidence/pedometer-reset.jpg" width="320" alt="Podómetro reiniciado">
+</p>
+
+### Actividad detectada
+
+<p align="center">
+  <img src="docs/evidence/pedometer-progress.jpg" width="320" alt="Podómetro en progreso">
+</p>
+
+### Meta alcanzada
+
+<p align="center">
+  <img src="docs/evidence/pedometer-goal.jpg" width="320" alt="Meta del podómetro">
+</p>
+
+---
+
+## Retos completados
+
+| Reto | Descripción | Estado |
+|---|---|---|
+| A1 | Registrar la magnitud máxima del acelerómetro | ✅ |
+| A2 | Contar movimientos fuertes sin duplicarlos | ✅ |
+| L1 | Implementar un modo intermitente para la linterna | ✅ |
+| V1 | Crear un patrón personalizado de vibración | ✅ |
+| S1 | Implementar un sensor o periférico adicional | ✅ |
+
+---
+
+## Tecnologías utilizadas
+
+- Kotlin
+- XML
+- Android Studio
+- Android Sensor Framework
+- CameraManager
+- VibrationEffect
+- Git
+- GitHub
+
+---
+
+## Permisos utilizados
+
+La aplicación utiliza permisos para:
+
+- Vibración.
+- Reconocimiento de actividad física para el podómetro.
+
+---
+
+## Cómo ejecutar el proyecto
+
+1. Clonar el repositorio:
+
+```bash
+git clone https://github.com/GonzaloTT/PhoneLab-Android.git
