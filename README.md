@@ -146,6 +146,31 @@ La aplicación utiliza permisos para:
 
 ---
 
+## Hardware probado
+
+La aplicación fue probada en un teléfono Android físico.
+
+Durante las pruebas se verificó el funcionamiento de:
+
+- Acelerómetro.
+- Flash / linterna.
+- Motor de vibración.
+- Detector de pasos.
+- Sensor de orientación.
+
+El dispositivo utilizado detectó, entre otros, los siguientes sensores:
+
+- `icm4x6xx Accelerometer`
+- `icm4x6xx Gyroscope`
+- `pedometer`
+- `Proximity Sensor`
+- `Ambient Light Sensor`
+- `Magnetometer`
+
+La prueba en dispositivo físico permitió validar correctamente las funciones que dependen de hardware real.
+
+--
+
 ## Cómo ejecutar el proyecto
 
 1. Clonar el repositorio:
