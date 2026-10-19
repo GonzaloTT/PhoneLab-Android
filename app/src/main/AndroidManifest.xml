@@ -33,6 +33,10 @@
         android:theme="@style/Theme.PhoneLab">
 
         <activity
+            android:name=".HistorialActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".CustomSensorActivity"
             android:exported="false" />
 
