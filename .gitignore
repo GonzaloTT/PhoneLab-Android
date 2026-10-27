@@ -8,3 +8,6 @@
 .externalNativeBuild/
 .cxx/
 app/build/
+
+# Firebase project configuration
+app/google-services.json

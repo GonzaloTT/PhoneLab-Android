@@ -1,109 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true"
-    android:background="@color/surface_soft">
+    android:orientation="vertical"
+    android:background="@color/surface_soft"
+    android:padding="20dp">
 
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp">
+        android:text="Historial y Firebase"
+        android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
+        android:textStyle="bold" />
 
-        <!-- Título -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Historial de lecturas"
-            android:textAppearance="@style/TextAppearance.Material3.HeadlineMedium"
-            android:textStyle="bold" />
+    <TextView
+        android:id="@+id/txtResumen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Mostrando lecturas..."
+        android:textColor="@color/text_secondary" />
 
-        <!-- Descripción -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Lecturas del acelerómetro almacenadas localmente con Room."
-            android:textColor="@color/text_secondary"
-            android:textSize="16sp" />
+    <EditText
+        android:id="@+id/etEquipo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:hint="Nombre del equipo (Equipo_01)"
+        android:inputType="text"
+        android:maxLength="40"
+        android:singleLine="true" />
 
-        <!-- Resumen -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            app:cardCornerRadius="18dp">
+    <TextView
+        android:id="@+id/txtEstadoNube"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Firebase: sin autenticar"
+        android:textColor="@color/teal_secondary"
+        android:textIsSelectable="true"
+        android:textSize="13sp"
+        android:textStyle="bold" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="18dp">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/listaLecturas"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="12dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="8dp" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Resumen"
-                    android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-                    android:textStyle="bold" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnActualizar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Actualizar historial local" />
 
-                <TextView
-                    android:id="@+id/tvTotalReadings"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="Lecturas guardadas: 0"
-                    android:textSize="18sp" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnNube"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="Sincronizar hasta 25 lecturas" />
 
-            </LinearLayout>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnConsultarNube"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:text="Consultar 3 lecturas en Firebase" />
 
-        </com.google.android.material.card.MaterialCardView>
+    <TextView
+        android:id="@+id/txtUltimasNube"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:maxLines="4"
+        android:ellipsize="end"
+        android:text="Aquí aparecerán las últimas lecturas del servidor."
+        android:textColor="@color/text_secondary"
+        android:textSize="13sp" />
 
-        <!-- Título de la lista -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
-            android:text="Lecturas registradas"
-            android:textAppearance="@style/TextAppearance.Material3.TitleMedium"
-            android:textStyle="bold" />
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnBorrar"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="Eliminar historial local" />
 
-        <!-- Estado cuando no hay datos -->
-        <TextView
-            android:id="@+id/tvEmptyHistory"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:gravity="center"
-            android:padding="24dp"
-            android:text="Todavía no hay lecturas guardadas."
-            android:textColor="@color/text_secondary"
-            android:textSize="16sp" />
-
-        <!--
-            Aquí se agregarán dinámicamente las lecturas
-            obtenidas desde Room.
-        -->
-        <LinearLayout
-            android:id="@+id/historyContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:orientation="vertical" />
-
-        <!-- Borrar historial -->
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnDeleteHistory"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="Borrar historial" />
-
-    </LinearLayout>
-
-</ScrollView>
+</LinearLayout>

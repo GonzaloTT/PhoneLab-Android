@@ -1,13 +1,16 @@
 package com.example.phonelab
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "accelerometer_reads")
+@Entity(
+    tableName = "accelerometer_reads"
+)
 data class ReadAccelerometer(
 
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    val id: Long = 0L,
 
     val x: Float,
 
@@ -17,5 +20,8 @@ data class ReadAccelerometer(
 
     val magnitude: Float,
 
-    val timestamp: Long = System.currentTimeMillis()
+    val timestamp: Long = System.currentTimeMillis(),
+
+    @ColumnInfo(defaultValue = "0")
+    val sincronizada: Boolean = false
 )

@@ -2,24 +2,19 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Permiso necesario para la vibración. -->
+    <uses-permission
+        android:name="android.permission.INTERNET" />
+
     <uses-permission
         android:name="android.permission.VIBRATE" />
 
-    <!--
-        Android 10 o superior requiere este permiso
-        para acceder a sensores relacionados con actividad física,
-        como el detector de pasos.
-    -->
     <uses-permission
         android:name="android.permission.ACTIVITY_RECOGNITION" />
 
-    <!-- El flash es opcional. -->
     <uses-feature
         android:name="android.hardware.camera.flash"
         android:required="false" />
 
-    <!-- El detector de pasos también se declara como opcional. -->
     <uses-feature
         android:name="android.hardware.sensor.stepdetector"
         android:required="false" />

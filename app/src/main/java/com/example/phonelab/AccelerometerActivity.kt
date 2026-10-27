@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
-import androidx.room.Room
 import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -44,7 +43,8 @@ class AccelerometerActivity : AppCompatActivity(), SensorEventListener {
     private var wasStrongMovement = false
 
     // Última lectura recibida del acelerómetro.
-    // Estos valores serán los que se guarden en Room.
+    // Esta será la lectura que se guardará en Room
+    // cuando el usuario pulse "Guardar lectura".
     private var currentX = 0f
     private var currentY = 0f
     private var currentZ = 0f
@@ -56,7 +56,7 @@ class AccelerometerActivity : AppCompatActivity(), SensorEventListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_accelerometer)
 
-        // Referencias de la interfaz
+        // Referencias de la interfaz.
         tvSensorState = findViewById(R.id.tvSensorState)
         tvX = findViewById(R.id.tvX)
         tvY = findViewById(R.id.tvY)
@@ -68,23 +68,22 @@ class AccelerometerActivity : AppCompatActivity(), SensorEventListener {
         tvOrientation = findViewById(R.id.tvOrientation)
 
         tvDatabaseStatus = findViewById(R.id.tvDatabaseStatus)
+
         btnSaveReading = findViewById(R.id.btnSaveReading)
         btnViewReadings = findViewById(R.id.btnViewReadings)
 
-        // Inicialización de Room
-        database = Room.databaseBuilder(
-            applicationContext,
-            AppDatabase::class.java,
-            "phonelab_database"
-        ).build()
-
+        // Room:
+        // Se utiliza la instancia única definida en AppDatabase.
+        database = AppDatabase.getInstance(applicationContext)
         readDao = database.readDao()
 
-        // Inicialización del acelerómetro
+        // Inicialización del acelerómetro.
         sensorManager = getSystemService(SensorManager::class.java)
 
         accelerometer =
-            sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+            sensorManager.getDefaultSensor(
+                Sensor.TYPE_ACCELEROMETER
+            )
 
         if (accelerometer == null) {
 
@@ -98,11 +97,12 @@ class AccelerometerActivity : AppCompatActivity(), SensorEventListener {
             tvSensorState.text =
                 "Sensor detectado: ${accelerometer?.name}"
 
-            // Hasta recibir la primera lectura no permitimos guardar.
+            // No permitimos guardar hasta recibir
+            // la primera lectura real del sensor.
             btnSaveReading.isEnabled = false
         }
 
-        // Guardar la lectura actual en Room
+        // Guarda la lectura actual en Room.
         btnSaveReading.setOnClickListener {
 
             if (hasSensorReading) {
@@ -110,7 +110,7 @@ class AccelerometerActivity : AppCompatActivity(), SensorEventListener {
             }
         }
 
-        // Abrir la pantalla del historial
+        // Abre la pantalla del historial.
         btnViewReadings.setOnClickListener {
 
             val intent =
@@ -137,7 +137,8 @@ class AccelerometerActivity : AppCompatActivity(), SensorEventListener {
             )
         }
 
-        // Al regresar del historial actualizamos el contador.
+        // Si volvemos desde el historial,
+        // actualizamos el número de registros.
         updateSavedReadingsCount()
     }
 
@@ -149,7 +150,10 @@ class AccelerometerActivity : AppCompatActivity(), SensorEventListener {
 
     override fun onSensorChanged(event: SensorEvent?) {
 
-        if (event?.sensor?.type != Sensor.TYPE_ACCELEROMETER) {
+        if (
+            event?.sensor?.type !=
+            Sensor.TYPE_ACCELEROMETER
+        ) {
             return
         }
 
@@ -179,44 +183,46 @@ class AccelerometerActivity : AppCompatActivity(), SensorEventListener {
         hasSensorReading = true
         btnSaveReading.isEnabled = true
 
-        val movementState = when {
+        val movementState =
+            when {
 
-            differenceFromGravity < 1.5f ->
-                "Estable"
+                differenceFromGravity < 1.5f ->
+                    "Estable"
 
-            differenceFromGravity < 4.0f ->
-                "Movimiento moderado"
+                differenceFromGravity < 4.0f ->
+                    "Movimiento moderado"
 
-            else ->
-                "Movimiento fuerte"
-        }
-
-        val orientationState = when {
-
-            abs(z) > 7f -> {
-
-                if (z > 0) {
-                    "Pantalla hacia arriba"
-                } else {
-                    "Pantalla hacia abajo"
-                }
+                else ->
+                    "Movimiento fuerte"
             }
 
-            abs(y) > 7f -> {
+        val orientationState =
+            when {
 
-                if (y > 0) {
-                    "Vertical"
-                } else {
-                    "Vertical invertido"
+                abs(z) > 7f -> {
+
+                    if (z > 0) {
+                        "Pantalla hacia arriba"
+                    } else {
+                        "Pantalla hacia abajo"
+                    }
                 }
+
+                abs(y) > 7f -> {
+
+                    if (y > 0) {
+                        "Vertical"
+                    } else {
+                        "Vertical invertido"
+                    }
+                }
+
+                abs(x) > 7f ->
+                    "Horizontal / paisaje"
+
+                else ->
+                    "Inclinado"
             }
-
-            abs(x) > 7f ->
-                "Horizontal / paisaje"
-
-            else ->
-                "Inclinado"
-        }
 
         // Reto A1:
         // conservar la magnitud máxima registrada.
@@ -225,8 +231,7 @@ class AccelerometerActivity : AppCompatActivity(), SensorEventListener {
         }
 
         // Reto A2:
-        // contar únicamente cuando inicia
-        // un nuevo movimiento fuerte.
+        // contar solo el inicio de cada movimiento fuerte.
         val isStrongMovement =
             movementState == "Movimiento fuerte"
 
@@ -240,7 +245,7 @@ class AccelerometerActivity : AppCompatActivity(), SensorEventListener {
         wasStrongMovement =
             isStrongMovement
 
-        // Actualización de interfaz
+        // Actualización de interfaz.
         tvX.text =
             "X = %.2f m/s²".format(x)
 
@@ -251,12 +256,12 @@ class AccelerometerActivity : AppCompatActivity(), SensorEventListener {
             "Z = %.2f m/s²".format(z)
 
         tvMagnitude.text =
-            "Magnitud: %.2f m/s²".format(magnitude)
+            "Magnitud: %.2f m/s²"
+                .format(magnitude)
 
         tvMaxMagnitude.text =
-            "Magnitud máxima: %.2f m/s²".format(
-                maxMagnitude
-            )
+            "Magnitud máxima: %.2f m/s²"
+                .format(maxMagnitude)
 
         tvMovement.text =
             "Movimiento: $movementState"
@@ -270,36 +275,48 @@ class AccelerometerActivity : AppCompatActivity(), SensorEventListener {
 
     private fun saveCurrentReading() {
 
-        val reading = ReadAccelerometer(
-            x = currentX,
-            y = currentY,
-            z = currentZ,
-            magnitude = currentMagnitude
-        )
+        val reading =
+            ReadAccelerometer(
+                x = currentX,
+                y = currentY,
+                z = currentZ,
+                magnitude = currentMagnitude
+            )
 
-        lifecycleScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch(
+            Dispatchers.IO
+        ) {
 
+            // Al insertarse, sincronizada queda en false.
+            // Posteriormente Firebase cambiará este estado.
             readDao.insert(reading)
 
             val totalReadings =
-                readDao.getAll().size
+                readDao.countAll()
 
-            withContext(Dispatchers.Main) {
+            withContext(
+                Dispatchers.Main
+            ) {
 
                 tvDatabaseStatus.text =
-                    "Lectura guardada correctamente. Total: $totalReadings"
+                    "Lectura guardada correctamente. " +
+                            "Total: $totalReadings"
             }
         }
     }
 
     private fun updateSavedReadingsCount() {
 
-        lifecycleScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch(
+            Dispatchers.IO
+        ) {
 
             val totalReadings =
-                readDao.getAll().size
+                readDao.countAll()
 
-            withContext(Dispatchers.Main) {
+            withContext(
+                Dispatchers.Main
+            ) {
 
                 tvDatabaseStatus.text =
                     if (totalReadings == 0) {
